@@ -9,7 +9,16 @@
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "${file}"
+            "program": "${workspaceFolder}",
+            "env": {
+                "SBOM_VERBOSITY": "debug",
+                "SBOM_FORMAT": "cyclonedxjson",
+                "SBOM_TARGETS": "dtrack",
+                "SBOM_CRON": "0 * * * *",
+                "SBOM_DTRACK_BASE_URL": "https://dependencytrack.minikube.internal",
+                "SBOM_DTRACK_API_KEY": "",
+                "SBOM_IGNORE_ANNOTATIONS": "true",
+            }
         }
     ]
 }

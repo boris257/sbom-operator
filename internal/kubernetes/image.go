@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ckotzbauer/libk8soci/pkg/oci"
+	"github.com/ckotzbauer/sbom-operator/pkg/oci"
 	parser "github.com/novln/docker-parser"
 	"github.com/novln/docker-parser/docker"
 	"github.com/sirupsen/logrus"

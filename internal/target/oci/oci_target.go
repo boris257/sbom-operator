@@ -3,9 +3,9 @@ package oci
 import (
 	"fmt"
 
-	libk8s "github.com/ckotzbauer/libk8soci/pkg/oci"
 	"github.com/ckotzbauer/sbom-operator/internal"
 	"github.com/ckotzbauer/sbom-operator/internal/target"
+	libk8s "github.com/ckotzbauer/sbom-operator/pkg/oci"
 	"github.com/google/go-containerregistry/pkg/authn"
 	"github.com/google/go-containerregistry/pkg/name"
 	"github.com/google/go-containerregistry/pkg/v1/remote"

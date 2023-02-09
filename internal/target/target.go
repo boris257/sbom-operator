@@ -1,8 +1,8 @@
 package target
 
 import (
-	libk8s "github.com/ckotzbauer/libk8soci/pkg/kubernetes"
-	"github.com/ckotzbauer/libk8soci/pkg/oci"
+	libk8s "github.com/ckotzbauer/sbom-operator/pkg/kubernetes"
+	"github.com/ckotzbauer/sbom-operator/pkg/oci"
 )
 
 type TargetContext struct {

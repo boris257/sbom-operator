@@ -5,18 +5,18 @@ import (
 	"os/signal"
 	"syscall"
 
-	libk8s "github.com/ckotzbauer/libk8soci/pkg/kubernetes"
-	liboci "github.com/ckotzbauer/libk8soci/pkg/oci"
 	"github.com/ckotzbauer/libstandard"
 	"github.com/ckotzbauer/sbom-operator/internal"
 	"github.com/ckotzbauer/sbom-operator/internal/job"
 	"github.com/ckotzbauer/sbom-operator/internal/kubernetes"
-	"github.com/ckotzbauer/sbom-operator/internal/syft"
 	"github.com/ckotzbauer/sbom-operator/internal/target"
 	"github.com/ckotzbauer/sbom-operator/internal/target/configmap"
 	"github.com/ckotzbauer/sbom-operator/internal/target/dtrack"
 	"github.com/ckotzbauer/sbom-operator/internal/target/git"
 	"github.com/ckotzbauer/sbom-operator/internal/target/oci"
+	"github.com/ckotzbauer/sbom-operator/internal/trivy"
+	libk8s "github.com/ckotzbauer/sbom-operator/pkg/kubernetes"
+	liboci "github.com/ckotzbauer/sbom-operator/pkg/oci"
 	"github.com/sirupsen/logrus"
 	"k8s.io/client-go/tools/cache"
 
@@ -25,12 +25,12 @@ import (
 
 type Processor struct {
 	K8s      *kubernetes.KubeClient
-	sy       *syft.Syft
+	sy       *trivy.Trivy
 	Targets  []target.Target
 	imageMap map[string]bool
 }
 
-func New(k8s *kubernetes.KubeClient, sy *syft.Syft) *Processor {
+func New(k8s *kubernetes.KubeClient, sy *trivy.Trivy) *Processor {
 	targets := make([]target.Target, 0)
 	if !HasJobImage() {
 		logrus.Debugf("Targets set to: %v", internal.OperatorConfig.Targets)
@@ -73,7 +73,7 @@ func (p *Processor) ListenForPods() {
 
 func (p *Processor) ProcessAllPods(pods []libk8s.PodInfo, allImages []*liboci.RegistryImage) {
 	if !HasJobImage() {
-		p.executeSyftScans(pods, allImages)
+		p.executeTrivyScans(pods, allImages)
 	} else {
 		p.executeJobImage(pods)
 	}
@@ -86,14 +86,14 @@ func (p *Processor) scanPod(pod libk8s.PodInfo) {
 	for _, container := range pod.Containers {
 		alreadyScanned := p.imageMap[container.Image.ImageID]
 		if p.K8s.HasAnnotation(pod.Annotations, container) || alreadyScanned {
-			logrus.Debugf("Skip image %s", container.Image.ImageID)
+			logrus.Debugf("Skip image %s", container.Image.Image)
 			continue
 		}
 
 		p.imageMap[container.Image.ImageID] = true
-		sbom, err := p.sy.ExecuteSyft(container.Image)
+		sbom, err := p.sy.ExecuteTrivy(container.Image)
 		if err != nil {
-			// Error is already handled from syft module.
+			// Error is already handled from trivy module.
 			continue
 		}
 
@@ -171,7 +171,7 @@ func HasJobImage() bool {
 	return internal.OperatorConfig.JobImage != ""
 }
 
-func (p *Processor) executeSyftScans(pods []libk8s.PodInfo, allImages []*liboci.RegistryImage) {
+func (p *Processor) executeTrivyScans(pods []libk8s.PodInfo, allImages []*liboci.RegistryImage) {
 	for _, pod := range pods {
 		p.scanPod(pod)
 	}
@@ -211,7 +211,7 @@ func (p *Processor) executeJobImage(pods []libk8s.PodInfo) {
 		filteredContainers := make([]*libk8s.ContainerInfo, 0)
 		for _, container := range pod.Containers {
 			if p.K8s.HasAnnotation(pod.Annotations, container) {
-				logrus.Debugf("Skip image %s", container.Image.ImageID)
+				logrus.Debugf("Skip image %s", container.Image.Image)
 				continue
 			}
 
@@ -366,7 +366,7 @@ func (p *Processor) runInformerAsync(informer cache.SharedIndexInformer) {
 			}
 
 			if len(missingPods) > 0 {
-				p.executeSyftScans(missingPods, allImages)
+				p.executeTrivyScans(missingPods, allImages)
 			}
 		}
 	}()

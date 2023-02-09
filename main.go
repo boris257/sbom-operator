@@ -10,7 +10,7 @@ import (
 	"github.com/ckotzbauer/sbom-operator/internal/daemon"
 	"github.com/ckotzbauer/sbom-operator/internal/kubernetes"
 	"github.com/ckotzbauer/sbom-operator/internal/processor"
-	"github.com/ckotzbauer/sbom-operator/internal/syft"
+	"github.com/ckotzbauer/sbom-operator/internal/trivy"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -38,8 +38,8 @@ func newRootCmd() *cobra.Command {
 				daemon.Start(internal.OperatorConfig.Cron)
 			} else {
 				k8s := kubernetes.NewClient(internal.OperatorConfig.IgnoreAnnotations, internal.OperatorConfig.FallbackPullSecret)
-				sy := syft.New(internal.OperatorConfig.Format, libstandard.ToMap(internal.OperatorConfig.RegistryProxies))
-				p := processor.New(k8s, sy)
+				scanner := trivy.New(internal.OperatorConfig.Format, libstandard.ToMap(internal.OperatorConfig.RegistryProxies))
+				p := processor.New(k8s, scanner)
 				p.ListenForPods()
 			}
 

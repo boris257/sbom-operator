@@ -12,9 +12,9 @@ import (
 	dtrack "github.com/nscuro/dtrack-client"
 	"github.com/sirupsen/logrus"
 
-	libk8s "github.com/ckotzbauer/libk8soci/pkg/oci"
 	"github.com/ckotzbauer/sbom-operator/internal"
 	"github.com/ckotzbauer/sbom-operator/internal/target"
+	libk8s "github.com/ckotzbauer/sbom-operator/pkg/oci"
 )
 
 type DependencyTrackTarget struct {
@@ -271,9 +271,9 @@ func removeTag(tags []dtrack.Tag, tagString string) []dtrack.Tag {
 }
 
 func getRepoWithVersion(image *libk8s.RegistryImage) (string, string) {
-	imageRef, err := parser.Parse(image.ImageID)
+	imageRef, err := parser.Parse(image.Image)
 	if err != nil {
-		logrus.WithError(err).Errorf("Could not parse image %s", image.ImageID)
+		logrus.WithError(err).Errorf("Could not parse image %s", image.Image)
 		return "", ""
 	}
 

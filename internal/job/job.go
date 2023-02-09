@@ -11,9 +11,9 @@ import (
 	batchv1 "k8s.io/api/batch/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	libk8s "github.com/ckotzbauer/libk8soci/pkg/kubernetes"
-	"github.com/ckotzbauer/libk8soci/pkg/oci"
 	"github.com/ckotzbauer/sbom-operator/internal/kubernetes"
+	libk8s "github.com/ckotzbauer/sbom-operator/pkg/kubernetes"
+	"github.com/ckotzbauer/sbom-operator/pkg/oci"
 	"github.com/sirupsen/logrus"
 )
 

@@ -3,10 +3,10 @@ package configmap
 import (
 	"fmt"
 
-	libk8s "github.com/ckotzbauer/libk8soci/pkg/oci"
 	"github.com/ckotzbauer/libstandard"
 	"github.com/ckotzbauer/sbom-operator/internal/kubernetes"
 	"github.com/ckotzbauer/sbom-operator/internal/target"
+	libk8s "github.com/ckotzbauer/sbom-operator/pkg/oci"
 	"github.com/sirupsen/logrus"
 )
 

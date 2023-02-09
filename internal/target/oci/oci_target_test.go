@@ -5,9 +5,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ckotzbauer/libk8soci/pkg/kubernetes"
-	liboci "github.com/ckotzbauer/libk8soci/pkg/oci"
 	"github.com/ckotzbauer/sbom-operator/internal/target"
+	"github.com/ckotzbauer/sbom-operator/pkg/kubernetes"
+	liboci "github.com/ckotzbauer/sbom-operator/pkg/oci"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -3,8 +3,8 @@ package kubernetes_test
 import (
 	"testing"
 
-	"github.com/ckotzbauer/libk8soci/pkg/oci"
 	"github.com/ckotzbauer/sbom-operator/internal/kubernetes"
+	"github.com/ckotzbauer/sbom-operator/pkg/oci"
 	"github.com/stretchr/testify/assert"
 )
 

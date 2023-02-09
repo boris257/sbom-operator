@@ -7,11 +7,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ckotzbauer/libk8soci/pkg/git"
-	libk8s "github.com/ckotzbauer/libk8soci/pkg/oci"
 	"github.com/ckotzbauer/sbom-operator/internal"
-	"github.com/ckotzbauer/sbom-operator/internal/syft"
 	"github.com/ckotzbauer/sbom-operator/internal/target"
+	"github.com/ckotzbauer/sbom-operator/internal/trivy"
+	"github.com/ckotzbauer/sbom-operator/pkg/git"
+	libk8s "github.com/ckotzbauer/sbom-operator/pkg/oci"
 	"github.com/sirupsen/logrus"
 )
 
@@ -86,7 +86,7 @@ func (g *GitTarget) ProcessSbom(ctx *target.TargetContext) error {
 
 func (g *GitTarget) LoadImages() []*libk8s.RegistryImage {
 	ignoreDirs := []string{".git"}
-	fileName := syft.GetFileName(g.sbomFormat)
+	fileName := trivy.GetFileName(g.sbomFormat)
 	basePath := filepath.Join(g.workingTree, g.workPath)
 	images := make([]*libk8s.RegistryImage, 0)
 
@@ -153,7 +153,7 @@ func (g *GitTarget) mapToFiles(allImages []*libk8s.RegistryImage) []string {
 }
 
 func (g *GitTarget) ImageIDToFilePath(id string) string {
-	fileName := syft.GetFileName(g.sbomFormat)
+	fileName := trivy.GetFileName(g.sbomFormat)
 	filePath := strings.ReplaceAll(id, "@", "/")
 	return strings.ReplaceAll(path.Join(g.workingTree, g.workPath, filePath, fileName), ":", "_")
 }

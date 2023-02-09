@@ -7,7 +7,7 @@ import (
 	"github.com/ckotzbauer/sbom-operator/internal"
 	"github.com/ckotzbauer/sbom-operator/internal/kubernetes"
 	"github.com/ckotzbauer/sbom-operator/internal/processor"
-	"github.com/ckotzbauer/sbom-operator/internal/syft"
+	"github.com/ckotzbauer/sbom-operator/internal/trivy"
 	"github.com/robfig/cron"
 	"github.com/sirupsen/logrus"
 )
@@ -24,8 +24,8 @@ func Start(cronTime string) {
 	logrus.Debugf("Cron set to: %v", cr)
 
 	k8s := kubernetes.NewClient(internal.OperatorConfig.IgnoreAnnotations, internal.OperatorConfig.FallbackPullSecret)
-	sy := syft.New(internal.OperatorConfig.Format, libstandard.ToMap(internal.OperatorConfig.RegistryProxies))
-	processor := processor.New(k8s, sy)
+	scanner := trivy.New(internal.OperatorConfig.Format, libstandard.ToMap(internal.OperatorConfig.RegistryProxies))
+	processor := processor.New(k8s, scanner)
 
 	cs := CronService{cron: cr, processor: processor}
 	cs.printNextExecution()

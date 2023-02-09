@@ -13,8 +13,8 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/tools/cache"
 
-	libk8s "github.com/ckotzbauer/libk8soci/pkg/kubernetes"
-	"github.com/ckotzbauer/libk8soci/pkg/oci"
+	libk8s "github.com/ckotzbauer/sbom-operator/pkg/kubernetes"
+	"github.com/ckotzbauer/sbom-operator/pkg/oci"
 )
 
 type KubeClient struct {
