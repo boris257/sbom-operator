@@ -41,7 +41,7 @@ func (s Trivy) WithVersion(version string) Trivy {
 }
 
 func (s *Trivy) ExecuteTrivy(img *oci.RegistryImage) (string, error) {
-	logrus.Infof("Processing image %s", img.Image)
+	logrus.Infof("Processing image %s", img.Ref())
 	err := kubernetes.ApplyProxyRegistry(img, true, s.proxyRegistryMap)
 	if err != nil {
 		return "", err
@@ -54,7 +54,7 @@ func (s *Trivy) ExecuteTrivy(img *oci.RegistryImage) (string, error) {
 			CacheDir: utils.DefaultCacheDir(),
 		},
 		ScanOptions: flag.ScanOptions{
-			Target:         img.Image,
+			Target:         img.Ref(),
 			SecurityChecks: nil, // Disable all security checks for SBOM only scan
 		},
 		ReportOptions: flag.ReportOptions{

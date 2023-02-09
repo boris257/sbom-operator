@@ -86,7 +86,7 @@ func (p *Processor) scanPod(pod libk8s.PodInfo) {
 	for _, container := range pod.Containers {
 		alreadyScanned := p.imageMap[container.Image.ImageID]
 		if p.K8s.HasAnnotation(pod.Annotations, container) || alreadyScanned {
-			logrus.Debugf("Skip image %s", container.Image.Image)
+			logrus.Debugf("Skip image %s", container.Image.Ref())
 			continue
 		}
 
@@ -211,7 +211,7 @@ func (p *Processor) executeJobImage(pods []libk8s.PodInfo) {
 		filteredContainers := make([]*libk8s.ContainerInfo, 0)
 		for _, container := range pod.Containers {
 			if p.K8s.HasAnnotation(pod.Annotations, container) {
-				logrus.Debugf("Skip image %s", container.Image.Image)
+				logrus.Debugf("Skip image %s", container.Image.Ref())
 				continue
 			}
 

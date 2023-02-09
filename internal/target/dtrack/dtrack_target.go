@@ -271,9 +271,9 @@ func removeTag(tags []dtrack.Tag, tagString string) []dtrack.Tag {
 }
 
 func getRepoWithVersion(image *libk8s.RegistryImage) (string, string) {
-	imageRef, err := parser.Parse(image.Image)
+	imageRef, err := parser.Parse(image.Ref())
 	if err != nil {
-		logrus.WithError(err).Errorf("Could not parse image %s", image.Image)
+		logrus.WithError(err).Errorf("Could not parse image %s", image.Ref())
 		return "", ""
 	}
 
@@ -282,7 +282,7 @@ func getRepoWithVersion(image *libk8s.RegistryImage) (string, string) {
 	if strings.Index(image.Image, "sha256") != 0 {
 		imageRef, err = parser.Parse(image.Image)
 		if err != nil {
-			logrus.WithError(err).Errorf("Could not parse image %s", image.Image)
+			logrus.WithError(err).Errorf("Could not parse image %s", image.Ref())
 			return "", ""
 		}
 	}
