@@ -356,7 +356,7 @@ func (p *Processor) runInformerAsync(informer cache.SharedIndexInformer) {
 					info := p.K8s.Client.ExtractPodInfos(*pod)
 					for _, c := range info.Containers {
 						allImages = append(allImages, c.Image)
-						if !containsImage(targetImages, c.Image.ImageID) && !p.K8s.HasAnnotation(info.Annotations, c) {
+						if containsImage(targetImages, c.Image.ImageID) && !p.K8s.HasAnnotation(info.Annotations, c) {
 							missingPods = append(missingPods, info)
 							logrus.Debugf("Pod %s/%s needs to be analyzed", info.PodNamespace, info.PodName)
 							break
