@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/CycloneDX/cyclonedx-go v0.7.0
+	github.com/DependencyTrack/client-go v0.8.0
 	github.com/aquasecurity/trivy v0.36.1
 	github.com/ckotzbauer/libstandard v0.0.0-20230201033308-451a1baa8541
 	github.com/docker/cli v20.10.23+incompatible
@@ -12,7 +13,6 @@ require (
 	github.com/google/go-containerregistry v0.13.0
 	github.com/google/uuid v1.3.0
 	github.com/novln/docker-parser v1.0.0
-	github.com/nscuro/dtrack-client v0.7.0
 	github.com/pkg/errors v0.9.1
 	github.com/robfig/cron v1.2.0
 	github.com/sirupsen/logrus v1.9.0

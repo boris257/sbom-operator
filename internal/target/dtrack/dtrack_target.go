@@ -7,9 +7,9 @@ import (
 	"regexp"
 	"strings"
 
+	dtrack "github.com/DependencyTrack/client-go"
 	"github.com/google/uuid"
 	parser "github.com/novln/docker-parser"
-	dtrack "github.com/nscuro/dtrack-client"
 	"github.com/sirupsen/logrus"
 
 	"github.com/ckotzbauer/sbom-operator/internal"
